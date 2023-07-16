@@ -1,0 +1,56 @@
+<div class="background-image-container position-fixed w-100" [ngClass]="{light: theme?true:false}">
+  <img src="../assets/images/bg-desktop-dark.jpg" class="img-fluid w-100 d-none d-md-block" *ngIf="!theme">
+  <img src="../assets/images/bg-desktop-light.jpg" class="img-fluid w-100 d-none d-md-block" *ngIf="theme">
+  <img src="../assets/images/bg-mobile-dark.jpg" class="img-fluid w-100 d-block d-md-none" *ngIf="!theme">
+  <img src="../assets/images/bg-mobile-light.jpg" class="img-fluid w-100 d-block d-md-none" *ngIf="theme">
+</div>
+
+<div class="row m-0 justify-content-center align-items-center main-container">
+  <div class="col-md-6 col-11 h-75 position-relative">
+    <h1 class="col-1 app-title text-white my-2">TODO</h1>
+    <button class="theme-toggle-btn" (click)="theme=!theme">
+      <img src="../assets/images/icon-moon.svg" *ngIf="theme"/>
+      <img src="../assets/images/icon-sun.svg" *ngIf="!theme"/>
+    </button>
+    <div class="new-task-container py-2 px-4 rounded" [ngClass]="{light: theme?true:false}">
+      <input class="form-control border-0 dark-text" type="text" placeholder="Create new todo..." #todo (keyup.enter)="addTodo(todo.value); todo.value=''"/>
+    </div>
+
+    <div class="tasks-container mt-5 rounded px-md-2 shadow-lg" [ngClass]="{light: theme?true:false}">
+      <div class="task row m-0 py-2 align-items-center justify-content-center" [ngClass]="{light: theme?true:false}" *ngFor="let todo of (todos | filter : filterType)">
+        <button class="check-button col-1" [ngClass]="{'checked':todo.getIsActive()?false:true, 'light': theme?true:false}" (click)="updateStatus(todo, !todo.getIsActive())">
+          <img src="../assets/images/icon-check.svg" *ngIf="!todo.getIsActive()"/>
+        </button>
+        <div class="col-10 p-0">
+          <input class="form-control border-0 dark-text" [ngClass]="{'light': theme?true:false, 'completed': todo.getIsActive()?false:true, 'text-decoration-line-through':todo.getIsActive()?false:true}" type="text" #currentTodo (keyup.enter)="updateDescription(todo, currentTodo.value)" [value]="todo.getDescription()"/>
+        </div>
+        <button class="delete-button col-1 border-0" (click)="deleteTodo(todo)">
+          <img src="../assets/images/icon-cross.svg" />
+        </button>
+      </div>
+
+      <div class="row m-0 bottom-row py-2 justify-content-center align-items-center" [ngClass]="{light: theme?true:false}" *ngIf="todos.length>0">
+        <div class="col-md-3 col-6">
+          <p class="dark-text my-auto" [ngClass]="{light: theme?true:false}" >{{itemsLeft}} items left</p>
+        </div>
+        <div class="col-md-5 d-none d-md-block">
+          <ul class="d-flex flex-row mb-0 w-100 h-100">
+            <li class="mx-2 toggle-buttons"><a class="toggle-links dark-text" [ngClass]="{'active':filterType==1?true:false, 'light': theme?true:false}" (click)="filterType=1">All</a></li>
+            <li class="mx-2 toggle-buttons"><a class="toggle-links dark-text" [ngClass]="{'active':filterType==2?true:false, 'light': theme?true:false}" (click)="filterType=2">Active</a></li>
+            <li class="mx-2 toggle-buttons"><a class="toggle-links dark-text" [ngClass]="{'active':filterType==3?true:false, 'light': theme?true:false}" (click)="filterType=3">Completed</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-6 text-end">
+          <a class="toggle-links dark-text" [ngClass]="{light: theme?true:false}" (click)="clearCompleted()">Clear Completed</a>
+        </div>
+      </div>
+    </div>
+    <div class="my-3 justify-content-center d-block d-md-none bottom-row py-2 shadow rounded" *ngIf="todos.length>0" [ngClass]="{light: theme?true:false}">
+      <ul class="row mb-0 justify-content-center w-100 p-0 h-100 ">
+        <li class="col-3 toggle-buttons"><a class="toggle-links dark-text  text-center" [ngClass]="{'active':filterType==1?true:false, 'light': theme?true:false}" (click)="filterType=1">All</a></li>
+        <li class="col-3 toggle-buttons"><a class="toggle-links dark-text  text-center" [ngClass]="{'active':filterType==2?true:false, 'light': theme?true:false}" (click)="filterType=2">Active</a></li>
+        <li class="col-3 toggle-buttons"><a class="toggle-links dark-text  text-center" [ngClass]="{'active':filterType==3?true:false, 'light': theme?true:false}" (click)="filterType=3">Completed</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
